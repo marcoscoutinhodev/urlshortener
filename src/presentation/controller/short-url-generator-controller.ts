@@ -10,7 +10,8 @@ export class ShortUrlGeneratorController implements IController {
 
   async handle(request: IController.Request): Promise<IController.Response> {
     try {
-      const originalUrl = String(request.body?.originalUrl);
+      const originalUrl = request.body?.originalUrl
+        ? String(request.body?.originalUrl) : null;
 
       if (!originalUrl) {
         return badRequest(new Error('originalUrl is required'));
