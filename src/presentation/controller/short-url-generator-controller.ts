@@ -22,8 +22,12 @@ export class ShortUrlGeneratorController implements IController {
       }
 
       const data = await this.shortUrlGeneratorUseCase.generate(originalUrl);
+      const { host } = request;
 
-      return ok(data);
+      return ok({
+        originalUrl: data.originalUrl,
+        shortUrl: host + data.hash,
+      });
     } catch (err) {
       logError(err as Error);
       return serverError();

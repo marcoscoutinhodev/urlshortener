@@ -10,7 +10,7 @@ export function expressRouteAdapter(controller: IController) {
     } = environment;
 
     const host = req.hostname !== 'localhost'
-      ? `${req.hostname}/${environment.routePrefix}` : `${req.hostname}:${serverPort}/${routePrefix}`;
+      ? `${req.hostname + routePrefix}/` : `${req.hostname}:${serverPort + routePrefix}/`;
 
     const request: IController.Request = {
       body: req.body,
