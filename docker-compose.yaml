@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  mongodb-container:
+    container_name: mongo-url-shortener
+    image: mongo:4.4.18
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+  redis-container:
+    image: redis:alpine
+    container_name: redis-url-shortener
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass 85043c96e31fc53b000
+  service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ms-url-shortener
+    image: ms-url-shortener
+    restart: always
+    command: bash -c "yarn start"
+    ports:
+      - "3000:3000"
+    links:
+      - mongodb-container
+      - redis-container
