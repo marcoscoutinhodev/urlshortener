@@ -2,19 +2,28 @@ import { createClient, RedisClientType } from 'redis';
 
 class RedisHelper {
   private redisClient: RedisClientType | null = null;
+  private redisUri: string | null = null;
 
-  async getClient(): Promise<RedisClientType> {
+  async connect(redisUri: string): Promise<void> {
+    if (!this.redisUri) {
+      this.redisUri = redisUri;
+    }
+
     if (!this.redisClient) {
       this.redisClient = createClient({
-        url: 'redis://default:85043c96e31fc53b000@redis-container:6379',
+        url: this.redisUri,
       });
     }
 
-    if (!this.redisClient.isReady) {
-      await this.redisClient.connect();
+    await this.redisClient.connect();
+  }
+
+  async getClient(): Promise<RedisClientType> {
+    if (!this.redisClient!.isReady) {
+      await this.connect(this.redisUri!);
     }
 
-    return this.redisClient;
+    return this.redisClient!;
   }
 }
 
