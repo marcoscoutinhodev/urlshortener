@@ -1,0 +1,10 @@
+{
+  "name": "sirius",
+  "version": "0.0.1",
+  "description": "Micro-service for short URL generator",
+  "main": "src/app.js",
+  "repository": "https://github.com/marcoscoutinhodev/sirius_urlshortner",
+  "author": "Marcos Vinicius Coutinho",
+  "license": "MIT",
+  "private": true
+}
