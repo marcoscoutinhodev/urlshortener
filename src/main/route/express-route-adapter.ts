@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IController } from 'src/presentation/controller/interface/controller-interface';
+import { IController } from '../../presentation/controller/interface/controller-interface';
 import { environment } from '../configuration/environment';
 
 export function expressRouteAdapter(controller: IController) {
