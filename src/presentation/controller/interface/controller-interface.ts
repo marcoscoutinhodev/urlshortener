@@ -4,6 +4,7 @@ export interface IController {
 
 export namespace IController {
   export type Request = {
+    host: string
     body?: { [key:string]: any }
     params?: { [key:string]: string }
   };
