@@ -16,12 +16,12 @@ class MongoHelper {
     if (!this.mongoClient) { await this.connect(this.mongoUri!); }
 
     return this.mongoClient!
-      .db('url-shortner')
+      .db('url-shortener')
       .command({ ping: 1 })
-      .then(() => this.mongoClient!.db('url-shortner').collection(collection))
+      .then(() => this.mongoClient!.db('url-shortener').collection(collection))
       .catch(async () => {
         await this.connect(this.mongoUri!);
-        return this.mongoClient!.db('url-shortner').collection(collection);
+        return this.mongoClient!.db('url-shortener').collection(collection);
       });
   }
 }
