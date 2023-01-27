@@ -1,6 +1,6 @@
 import { IController } from './interface/controller-interface';
 import { IGetLongUrlUseCase } from '../../use-case/interface/get-long-url-use-case-interface';
-import { badRequest, ok, serverError } from '../helper/http';
+import { badRequest, redirect, serverError } from '../helper/http';
 import { logError } from '../helper/log-error';
 
 export class GetLongUrlController implements IController {
@@ -27,9 +27,8 @@ export class GetLongUrlController implements IController {
         return badRequest(data);
       }
 
-      return ok({
-        redirect: true,
-        longUrl: data.longUrl,
+      return redirect({
+        redirectTo: data.longUrl,
       });
     } catch (err) {
       logError(err as Error);

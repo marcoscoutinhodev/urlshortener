@@ -20,6 +20,12 @@ export function expressRouteAdapter(controller: IController) {
 
     const { statusCode, data } = await controller.handle(request);
 
+    if (statusCode === 301) {
+      return res
+        .status(301)
+        .redirect(data!.redirectTo);
+    }
+
     return res
       .status(statusCode)
       .json(data);
