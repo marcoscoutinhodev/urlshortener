@@ -1,32 +1,41 @@
 /* eslint-disable no-console */
 import express from 'express';
+import cluster from 'node:cluster';
+import os from 'node:os';
 
 import { environment } from './main/configuration/environment';
 import { router } from './main/route/routers';
 
-import { mongoHelper } from './infrastructure/repository/mongodb/helper';
-import { redisHelper } from './infrastructure/repository/redis/helper';
+cluster.schedulingPolicy = cluster.SCHED_RR;
 
-const app = express();
+if (cluster.isPrimary) {
+  const totalCpu = os.cpus().length;
+  console.log(`CPUs: ${totalCpu}`);
+  console.log(`Primary ${process.pid} started...`);
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+  for (let i = 0; i < totalCpu; i += 1) {
+    cluster.fork();
+  }
 
-const {
-  routePrefix,
-  serverPort,
-  mongoUri,
-  redisUri,
-} = environment;
+  cluster.on('exit', (worker) => {
+    console.log(`Worker ${worker.process.pid} died`);
 
-app.use(routePrefix, router);
+    cluster.fork();
+  });
+} else {
+  const app = express();
 
-app.listen(serverPort, async () => {
-  await mongoHelper.connect(mongoUri);
-  console.log('MongoDB Connected..');
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-  await redisHelper.connect(redisUri);
-  console.log('Redis Connected..');
+  const {
+    routePrefix,
+    serverPort,
+  } = environment;
 
-  console.log('Server is running...');
-});
+  app.use(routePrefix, router);
+
+  app.listen(serverPort, async () => {
+    console.log(`PID ${process.pid}: server is running..`);
+  });
+}
