@@ -4,7 +4,7 @@ export interface IAddShortUrlCacheRepository {
 
 export namespace IAddShortUrlCacheRepository {
   export type Data = {
-    originalUrl: string
+    longUrl: string
     hash: string
   };
 }

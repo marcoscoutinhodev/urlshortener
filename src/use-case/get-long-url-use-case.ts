@@ -24,7 +24,7 @@ export class GetLongUrlUseCase implements IGetLongUrlUseCase {
 
         await this.addShortUrlCacheRepository.add(
           {
-            originalUrl: longUrl,
+            longUrl,
             hash,
           },
           differenceInSeconds,

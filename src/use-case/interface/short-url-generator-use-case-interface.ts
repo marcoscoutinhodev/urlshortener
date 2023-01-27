@@ -1,10 +1,10 @@
 export interface IShortUrlGeneratorUseCase {
-  generate(originalUrl: string): Promise<IShortUrlGeneratorUseCase.Response>
+  generate(longUrl: string): Promise<IShortUrlGeneratorUseCase.Response>
 }
 
 export namespace IShortUrlGeneratorUseCase {
   export type Response = {
-    originalUrl: string
+    longUrl: string
     hash: string
   };
 }

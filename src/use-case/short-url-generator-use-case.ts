@@ -10,10 +10,10 @@ export class ShortUrlGeneratorUseCase implements IShortUrlGeneratorUseCase {
     private readonly addShortUrlCacheRepository: IAddShortUrlCacheRepository,
   ) {}
 
-  async generate(originalUrl: string): Promise<IShortUrlGeneratorUseCase.Response> {
+  async generate(longUrl: string): Promise<IShortUrlGeneratorUseCase.Response> {
     const hash = await this.hashAdapter.hasher();
     const payload = {
-      originalUrl,
+      longUrl,
       hash,
     };
 
@@ -21,7 +21,7 @@ export class ShortUrlGeneratorUseCase implements IShortUrlGeneratorUseCase {
     await this.addShortUrlCacheRepository.add(payload);
 
     return {
-      originalUrl,
+      longUrl,
       hash,
     };
   }

@@ -4,7 +4,7 @@ export interface IAddShortUrlRepository {
 
 export namespace IAddShortUrlRepository {
   export type Data = {
-    originalUrl: string
+    longUrl: string
     hash: string
   };
 }

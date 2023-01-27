@@ -10,22 +10,22 @@ export class ShortUrlGeneratorController implements IController {
 
   async handle(request: IController.Request): Promise<IController.Response> {
     try {
-      const originalUrl = request.body?.originalUrl
-        ? String(request.body?.originalUrl) : null;
+      const longUrl = request.body?.longUrl
+        ? String(request.body?.longUrl) : null;
 
-      if (!originalUrl) {
-        return badRequest(new Error('originalUrl is required'));
+      if (!longUrl) {
+        return badRequest(new Error('longUrl is required'));
       }
 
-      if (Buffer.byteLength(originalUrl, 'utf8') > 2048) {
-        return badRequest(new Error('originalUrl must be a maximum of 2KB'));
+      if (Buffer.byteLength(longUrl, 'utf8') > 2048) {
+        return badRequest(new Error('longUrl must be a maximum of 2KB'));
       }
 
-      const data = await this.shortUrlGeneratorUseCase.generate(originalUrl);
+      const data = await this.shortUrlGeneratorUseCase.generate(longUrl);
       const { host } = request;
 
       return ok({
-        originalUrl: data.originalUrl,
+        longUrl: data.longUrl,
         shortUrl: host + data.hash,
       });
     } catch (err) {
