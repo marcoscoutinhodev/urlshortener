@@ -13,30 +13,42 @@ export class GetLongUrlUseCase implements IGetLongUrlUseCase {
   async get(hash: string): Promise<IGetLongUrlUseCase.Response | Error> {
     const longUrlCached = await this.getLongUrlCacheRepository.get(hash);
 
-    if (!longUrlCached) {
-      const response = await this.getLongUrlRepository.get(hash);
+    if (longUrlCached) {
+      const { longUrl, expireAt } = longUrlCached;
+      return {
+        longUrl,
+        expireAt,
+      };
+    }
+    const dataFromRepository = await this.getLongUrlRepository.get(hash);
 
-      if (response) {
-        const { longUrl, expireAt } = response;
+    const err = () => new Error(`${hash} does not exist or has expired`);
 
-        const now = new Date();
-        const differenceInSeconds = (expireAt.getTime() - now.getTime()) / 1000;
-
-        await this.addShortUrlCacheRepository.add(
-          {
-            longUrl,
-            hash,
-          },
-          differenceInSeconds,
-        );
-
-        return {
-          longUrl,
-          expireAt,
-        };
-      }
+    if (!dataFromRepository) {
+      return err();
     }
 
-    return new Error(`${hash} does not exist or has expired`);
+    const { longUrl, expireAt } = dataFromRepository;
+
+    const now = new Date();
+    const differenceInSeconds = Math.floor((expireAt.getTime() - now.getTime()) / 1000);
+
+    if (differenceInSeconds <= 0) {
+      return err();
+    }
+
+    await this.addShortUrlCacheRepository.add(
+      {
+        longUrl,
+        hash,
+        expireAt,
+      },
+      differenceInSeconds,
+    );
+
+    return {
+      longUrl,
+      expireAt,
+    };
   }
 }
