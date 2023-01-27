@@ -1,5 +1,5 @@
 export interface IAddShortUrlCacheRepository {
-  add(data: IAddShortUrlCacheRepository.Data): Promise<void>
+  add(data: IAddShortUrlCacheRepository.Data, secondsToDataExpiry?: number): Promise<void>
 }
 
 export namespace IAddShortUrlCacheRepository {

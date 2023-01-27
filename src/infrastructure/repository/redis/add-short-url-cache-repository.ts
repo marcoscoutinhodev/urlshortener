@@ -7,10 +7,10 @@ export class AddShortUrlCacheRepository implements IAddShortUrlCacheRepository {
     private readonly secondsToDataExpiry: number,
   ) {}
 
-  async add(data: IAddShortUrlCacheRepository.Data): Promise<void> {
+  async add(data: IAddShortUrlCacheRepository.Data, secondsToDataExpiry?: number): Promise<void> {
     const redisClient = await this.redisHelper.getClient();
     await redisClient.set(data.hash, JSON.stringify(data), {
-      EX: this.secondsToDataExpiry,
+      EX: secondsToDataExpiry || this.secondsToDataExpiry,
     });
   }
 }
