@@ -1,5 +1,6 @@
 export const environment = {
-  amountOfBytesToHash: process.env.AMOUNT_OF_BYTES_TO_HASH || '11',
+  amountOfHashBytes: process.env.AMOUNT_OF_HASH_BYTES || '11',
+  amountOfBytesOfLongUrl: process.env.AMOUNT_OF_BYTES_OF_LONG_URL || '2048',
   secondsToUrlExpiration: process.env.SECONDS_TO_URL_EXPIRATION || '86400', // 86400 represents 24 hours
   routePrefix: process.env.ROUTE_PREFIX || '/url',
   serverPort: process.env.SERVER_PORT || '3000',

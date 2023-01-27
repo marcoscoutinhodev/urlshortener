@@ -7,6 +7,7 @@ import { getFormattedUrl } from '../helper/check-url';
 export class ShortUrlGeneratorController implements IController {
   constructor(
     private readonly shortUrlGeneratorUseCase: IShortUrlGeneratorUseCase,
+    private readonly amountOfBytesOfLongUrl: number,
   ) {}
 
   async handle(request: IController.Request): Promise<IController.Response> {
@@ -18,7 +19,7 @@ export class ShortUrlGeneratorController implements IController {
         return badRequest(new Error('longUrl is required'));
       }
 
-      if (Buffer.byteLength(longUrl, 'utf8') > 2048) {
+      if (Buffer.byteLength(longUrl, 'utf8') > this.amountOfBytesOfLongUrl) {
         return badRequest(new Error('longUrl must be a maximum of 2KB'));
       }
 

@@ -13,7 +13,7 @@ export class HashAdapter implements IHashAdapter {
           return reject(err);
         }
 
-        return resolve(buffer.toString('hex').substring(0, 11));
+        return resolve(buffer.toString('hex').substring(0, this.bytes));
       });
     });
   }

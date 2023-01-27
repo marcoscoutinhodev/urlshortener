@@ -6,6 +6,7 @@ import { logError } from '../helper/log-error';
 export class GetLongUrlController implements IController {
   constructor(
     private readonly getLongUrlUseCase: IGetLongUrlUseCase,
+    private readonly amountOfHashBytes: number,
   ) {}
 
   async handle(request: IController.Request): Promise<IController.Response> {
@@ -17,8 +18,8 @@ export class GetLongUrlController implements IController {
         return badRequest(new Error('hash is required'));
       }
 
-      if (Buffer.byteLength(hash, 'utf8') > 11) {
-        return badRequest(new Error('hash must be a maximum of 11 bytes'));
+      if (Buffer.byteLength(hash, 'utf8') !== this.amountOfHashBytes) {
+        return badRequest(new Error(`hash must be equal to ${this.amountOfHashBytes} bytes`));
       }
 
       const data = await this.getLongUrlUseCase.get(hash);
