@@ -11,10 +11,11 @@ export class GetLongUrlCacheRepository implements IGetLongUrlCacheRepository {
     const data = await redisClient.get(hash);
 
     if (data) {
-      const { longUrl } = JSON.parse(data);
+      const { longUrl, expireAt } = JSON.parse(data);
 
       return {
         longUrl,
+        expireAt,
       };
     }
 

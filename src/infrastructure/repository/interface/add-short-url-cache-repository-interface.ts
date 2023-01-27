@@ -6,5 +6,6 @@ export namespace IAddShortUrlCacheRepository {
   export type Data = {
     longUrl: string
     hash: string
+    expireAt: Date
   };
 }

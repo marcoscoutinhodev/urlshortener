@@ -5,5 +5,6 @@ export interface IGetLongUrlCacheRepository {
 export namespace IGetLongUrlCacheRepository {
   export type Response = {
     longUrl: string
+    expireAt: Date
   };
 }

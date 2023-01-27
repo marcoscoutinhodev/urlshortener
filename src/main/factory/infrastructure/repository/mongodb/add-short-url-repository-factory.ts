@@ -3,9 +3,11 @@ import { MongoHelper } from '../../../../../infrastructure/repository/mongodb/he
 import { environment } from '../../../../configuration/environment';
 
 export function makeAddShortUrlRepository() {
-  const { mongoUri, secondsToUrlExpiration } = environment;
+  const {
+    mongoUri,
+  } = environment;
+
   return new AddShortUrlRepository(
     new MongoHelper(mongoUri),
-    Number(secondsToUrlExpiration),
   );
 }

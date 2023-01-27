@@ -4,13 +4,12 @@ import { RedisHelper } from './helper';
 export class AddShortUrlCacheRepository implements IAddShortUrlCacheRepository {
   constructor(
     private readonly redisHelper: RedisHelper,
-    private readonly secondsToDataExpiry: number,
   ) {}
 
-  async add(data: IAddShortUrlCacheRepository.Data, secondsToDataExpiry?: number): Promise<void> {
+  async add(data: IAddShortUrlCacheRepository.Data, secondsToDataExpiry: number): Promise<void> {
     const redisClient = await this.redisHelper.getClient();
     await redisClient.set(data.hash, JSON.stringify(data), {
-      EX: secondsToDataExpiry || this.secondsToDataExpiry,
+      EX: secondsToDataExpiry,
     });
   }
 }

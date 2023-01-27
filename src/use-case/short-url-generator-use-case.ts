@@ -8,6 +8,7 @@ export class ShortUrlGeneratorUseCase implements IShortUrlGeneratorUseCase {
     private readonly hashAdapter: IHashAdapter,
     private readonly addShortUrlRepository: IAddShortUrlRepository,
     private readonly addShortUrlCacheRepository: IAddShortUrlCacheRepository,
+    private readonly secondsToDataExpiry: number,
   ) {}
 
   async generate(longUrl: string): Promise<IShortUrlGeneratorUseCase.Response> {
@@ -17,8 +18,15 @@ export class ShortUrlGeneratorUseCase implements IShortUrlGeneratorUseCase {
       hash,
     };
 
-    await this.addShortUrlRepository.add(payload);
-    await this.addShortUrlCacheRepository.add(payload);
+    const createdAt = new Date();
+    const expireAt = new Date();
+    expireAt.setSeconds(createdAt.getSeconds() + this.secondsToDataExpiry);
+
+    await this.addShortUrlRepository.add(payload, createdAt, expireAt);
+    await this.addShortUrlCacheRepository.add({
+      ...payload,
+      expireAt,
+    }, this.secondsToDataExpiry / 2);
 
     return {
       longUrl,

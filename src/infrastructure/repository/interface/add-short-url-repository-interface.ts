@@ -1,5 +1,5 @@
 export interface IAddShortUrlRepository {
-  add(data: IAddShortUrlRepository.Data): Promise<void>
+  add(data: IAddShortUrlRepository.Data, createdAt: Date, expireAt: Date): Promise<void>
 }
 
 export namespace IAddShortUrlRepository {
