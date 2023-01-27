@@ -1,14 +1,12 @@
 import { createClient, RedisClientType } from 'redis';
 
-class RedisHelper {
+export class RedisHelper {
   private redisClient: RedisClientType | null = null;
-  private redisUri: string | null = null;
+  constructor(
+    private readonly redisUri: string,
+  ) {}
 
-  async connect(redisUri: string): Promise<void> {
-    if (!this.redisUri) {
-      this.redisUri = redisUri;
-    }
-
+  async connect(): Promise<void> {
     if (!this.redisClient) {
       this.redisClient = createClient({
         url: this.redisUri,
@@ -19,12 +17,10 @@ class RedisHelper {
   }
 
   async getClient(): Promise<RedisClientType> {
-    if (!this.redisClient!.isReady) {
-      await this.connect(this.redisUri!);
+    if (!this.redisClient || !this.redisClient.isReady) {
+      await this.connect();
     }
 
     return this.redisClient!;
   }
 }
-
-export const redisHelper = new RedisHelper();

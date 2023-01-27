@@ -1,13 +1,14 @@
 import { IAddShortUrlRepository } from '../interface/add-short-url-repository-interface';
-import { mongoHelper } from './helper';
+import { MongoHelper } from './helper';
 
 export class AddShortUrlRepository implements IAddShortUrlRepository {
   constructor(
+    private readonly mongoHelper: MongoHelper,
     private readonly secondsToDataExpiry: number,
   ) {}
 
   async add(data: IAddShortUrlRepository.Data): Promise<void> {
-    const urlsCollection = await mongoHelper.getCollection('urls');
+    const urlsCollection = await this.mongoHelper.getCollection('urls');
 
     const createdAt = new Date();
     const expireAt = new Date();
