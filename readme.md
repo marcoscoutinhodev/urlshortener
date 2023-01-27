@@ -24,6 +24,9 @@ Start the server
 
 ```bash
   docker-compose up -d
+  
+  - To rebuild the server, type: docker-compose build service && docker-compose up -d
+  - To view the logs, type: docker logs --follow ms-url-shortener
 ```
 
 #### If you don't use Docker, you need to configure a server for MongoDB/Redis and the URI of each environment to run the server
@@ -40,8 +43,9 @@ Start the server
   yarn start
 ```
 ## Environments
-  - AMOUNT_OF_BYTES_TO_HASH -> Bytes to hash: default 11 bytes
-   - SECONDS_TO_URL_EXPIRATION -> Seconds for data to expire in MongoDB/Redis: default 86400 seconds (24 hours) for MongoDB and half value for Redis
+  - AMOUNT_OF_HASH_BYTES -> Bytes to hash: default 11 bytes
+  - AMOUNT_OF_BYTES_OF_LONG_URL -> Bytes to long url: default 2048 bytes
+  - SECONDS_TO_URL_EXPIRATION -> Seconds for data to expire in MongoDB/Redis: default 86400 seconds (24 hours) for MongoDB and half value for Redis
   - ROUTE_PREFIX -> Prefix for routes: default is '/url'
   - SERVER_PORT -> Default port: 3000
   - MONGO_URI / REDIS_URI -> URI for connection: default use Docker
