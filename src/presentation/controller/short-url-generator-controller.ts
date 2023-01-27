@@ -2,6 +2,7 @@ import { IController } from './interface/controller-interface';
 import { IShortUrlGeneratorUseCase } from '../../use-case/interface/short-url-generator-use-case-interface';
 import { badRequest, ok, serverError } from '../helper/http';
 import { logError } from '../helper/log-error';
+import { getFormattedUrl } from '../helper/check-url';
 
 export class ShortUrlGeneratorController implements IController {
   constructor(
@@ -19,6 +20,12 @@ export class ShortUrlGeneratorController implements IController {
 
       if (Buffer.byteLength(longUrl, 'utf8') > 2048) {
         return badRequest(new Error('longUrl must be a maximum of 2KB'));
+      }
+
+      const formattedUrl = await getFormattedUrl(longUrl);
+
+      if (!formattedUrl) {
+        return badRequest(new Error('longUrl must have a valid url format'));
       }
 
       const data = await this.shortUrlGeneratorUseCase.generate(longUrl);
